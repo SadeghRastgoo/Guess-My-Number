@@ -1,63 +1,67 @@
 'use strict';
 
-let secretNumber = Math.trunc(Math.random() * 20) + 1;
-let score = 20,
-  highscore = 0;
+const checkBtn = document.querySelector('.btn.check');
+const numberInp = document.querySelector('input.guess');
+const scorePlaceholder = document.querySelector('.score');
+const numberBox = document.querySelector('.number');
+const messageEl = document.querySelector('.message');
+const hightScoreEl = document.querySelector('.highscore');
+const bodyEl = document.querySelector('body');
+const upKey = document.querySelector('.bi1');
+const downKey = document.querySelector('.bi2');
 
-// Queries
-const checkQuery = document.querySelector('.check');
-const againQuery = document.querySelector('.again');
-const guessQuery = document.querySelector('.guess');
-const messageQuery = document.querySelector('.message');
-const numberQuery = document.querySelector('.number');
-const bodyQuery = document.querySelector('body');
-const highscoreQuery = document.querySelector('.highscore');
-const scoreQuery = document.querySelector('.score');
+let number = Math.trunc(Math.random() * 20) + 1;
+let score = 20;
+let highScore = 0;
 
-// Functions
-
-const displayMessage = function (message) {
-  return (messageQuery.textContent = message);
+const notCorrectState = function (messagePlaceholder) {
+  messageEl.textContent = messagePlaceholder;
+  score > 0 ? score-- : score;
 };
 
-checkQuery.addEventListener('click', function () {
-  const guess = Number(guessQuery.value);
+checkBtn.addEventListener('click', function () {
+  const guess = Number(numberInp.value);
 
   if (!guess) {
-    displayMessage('⛔ No Number!');
-  } else if (guess === secretNumber) {
-    displayMessage('🎉 Correct Number!');
-
-    numberQuery.textContent = secretNumber;
-    bodyQuery.style.backgroundColor = '#60b347';
-    numberQuery.style.width = '30rem';
-    checkQuery.style.visibility = 'hidden';
-
-    if (score > highscore) {
-      highscore = score;
-      highscoreQuery.textContent = highscore;
+    messageEl.textContent = '⛔ No Number!';
+  } else if (score <= 1) {
+    notCorrectState('💥 You Lost the game!');
+    scorePlaceholder.textContent = score;
+  } else if (guess === number) {
+    messageEl.textContent = '🎉 Correct Number!';
+    numberBox.textContent = number;
+    bodyEl.style.backgroundColor = '#60b347';
+    checkBtn.style.display = 'none';
+    document.querySelector('.number').style.width = '35rem';
+    if (score > highScore) {
+      highScore = score;
+      hightScoreEl.textContent = highScore;
     }
-  } else if (guess !== secretNumber) {
-    score--;
-    displayMessage(guess > secretNumber ? '📈 Too high' : '📉 Too low');
-  }
-
-  if (score < 1) {
-    displayMessage('😔 You lost the game');
-    scoreQuery.textContent = 'XX';
-  } else {
-    scoreQuery.textContent = score;
+  } else if (guess !== number) {
+    guess < number
+      ? notCorrectState('📉 Too Low!')
+      : notCorrectState('📈 Too High!');
+    scorePlaceholder.textContent = score;
   }
 });
 
-againQuery.addEventListener('click', function () {
-  secretNumber = secretNumber;
+const reset = function () {
+  number = Math.trunc(Math.random() * 20) + 1;
   score = 20;
-  bodyQuery.style.background = '#222';
-  checkQuery.style.visibility = 'visible';
-  displayMessage('Start guessing...');
-  numberQuery.textContent = '?';
-  numberQuery.style.width = '15rem';
-  guessQuery.value = '';
-  scoreQuery.textContent = score;
+  messageEl.textContent = 'Start guessing...';
+  scorePlaceholder.textContent = score;
+  numberBox.textContent = '?';
+  numberInp.value = '';
+  bodyEl.removeAttribute('style');
+  checkBtn.removeAttribute('style');
+  numberBox.removeAttribute('style');
+};
+
+document.querySelector('.btn.again').addEventListener('click', reset);
+
+upKey.addEventListener('click', function () {
+  numberInp.value = Number(numberInp.value) + 1;
+});
+downKey.addEventListener('click', function () {
+  numberInp.value = Number(numberInp.value) - 1;
 });

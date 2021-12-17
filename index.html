@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Guess My Number!</title>
   </head>
@@ -16,11 +20,17 @@
     </header>
     <main>
       <section class="left">
-        <input type="number" class="guess" />
-        <button class="btn check"">Check!</button>
+        <div class="inp-container">
+          <input type="number" min="0" max="20" class="guess" />
+
+          <i class="bi bi1 bi-arrow-up-square-fill"></i>
+          <i class="bi bi2 bi-arrow-down-square-fill"></i>
+        </div>
+
+        <button class="btn check">Check!</button>
       </section>
       <section class="right">
-        <p class="message">Start guessing...</p>
+        <p class="message" data-test="1s">Start guessing...</p>
         <p class="label-score">💯 Score: <span class="score">20</span></p>
         <p class="label-highscore">
           🥇 Highscore: <span class="highscore">0</span>
